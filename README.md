@@ -8,5 +8,9 @@ El repo Modbus_TCP contiene lo generado inicialmente desde un PC en Lubuntu, aho
 haciéndose las revisiones desde ahí y todo guardado en Modbus_TCP_2
 
 Revisión 1: Conexión solo TCP 
+
 Revisión 2: Agregado de Modbus y sin las funciones Modbus habilitadas
+
 Revisión 3: Modbus con las funciones habilitadas migrado de Linux EN REVISION
+
+Revisión 4:

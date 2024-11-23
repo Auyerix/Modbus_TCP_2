@@ -1,25 +1,26 @@
 #include "modbus.h"
 #include <string.h>
+#include "main.h"
 
 //--------for reading commands-----------------//
-extern void read_coils(char *repl_buf, uint16_t address, uint16_t quantity);
-extern void read_discrete(char *repl_buf, uint16_t address, uint16_t quantity);
-extern void read_holding(char *repl_buf, uint16_t address, uint16_t quantity);
-extern void read_inputs(char *repl_buf, uint16_t address, uint16_t quantity);
+extern void read_coils(uint8_t *repl_buf, uint16_t address, uint16_t quantity);
+extern void read_discrete(uint8_t *repl_buf, uint16_t address, uint16_t quantity);
+extern void read_holding(uint8_t *repl_buf, uint16_t address, uint16_t quantity);
+extern void read_inputs(uint8_t *repl_buf, uint16_t address, uint16_t quantity);
 //--------for writing commands-----------------//
 extern void write_single_coil(uint16_t address, uint16_t val);
 extern void write_single_holding(uint16_t address, uint16_t val);
 
-static uint16_t mb_process_pdu_read_fn(char *mb_repl_buf, char *mb_req_buf, uint16_t req_buf_len);
-static uint16_t mb_process_pdu_write_single_fn(char *mb_repl_buf, char *mb_req_buf, uint16_t req_buf_len);
-static uint16_t mb_process_err(char *mb_repl_buf, uint8_t fn, uint16_t exceptionCode);
+static uint16_t mb_process_pdu_read_fn(uint8_t *mb_repl_buf, uint8_t *mb_req_buf, uint16_t req_buf_len);
+static uint16_t mb_process_pdu_write_single_fn(uint8_t *mb_repl_buf, uint8_t *mb_req_buf, uint16_t req_buf_len);
+static uint16_t mb_process_err(uint8_t *mb_repl_buf, uint8_t fn, uint16_t exceptionCode);
 static uint8_t mb_process_start_address(uint16_t fn, uint16_t start_address, uint16_t quantity);
 static uint8_t mb_process_val(uint16_t fn, uint16_t val);
 
-static void mb_mbap_copy(char *mb_repl_buf, char *mb_req_buf);
+static void mb_mbap_copy(uint8_t *mb_repl_buf, uint8_t *mb_req_buf);
 static uint16_t mb_pdu_calculate_N(uint16_t fn, uint16_t quantity);
 
-uint16_t mb_process(char *mb_repl_buf, char *mb_req_buf, uint16_t req_buf_len) {
+uint16_t mb_process(uint8_t *mb_repl_buf, uint8_t *mb_req_buf, uint16_t req_buf_len) {
 	memset(mb_repl_buf, '\0', MB_ADU_MAXSIZE);  // clear the buffer
 	mb_mbap_copy(mb_repl_buf, mb_req_buf);
 	uint16_t pduLen = 0;
@@ -51,7 +52,7 @@ uint16_t mb_process(char *mb_repl_buf, char *mb_req_buf, uint16_t req_buf_len) {
 	return (pduLen + MB_MBAP_SIZE);
 }
 
-static uint16_t mb_process_pdu_read_fn(char *mb_repl_buf, char *mb_req_buf, uint16_t req_buf_len) {
+static uint16_t mb_process_pdu_read_fn(uint8_t *mb_repl_buf, uint8_t *mb_req_buf, uint16_t req_buf_len) {
 	uint8_t fn = mb_req_buf[MB_PDU_FN];
 	uint16_t start_address = mb_req_buf[MB_PDU_R_ST_ADDR_L] + (mb_req_buf[MB_PDU_R_ST_ADDR_H] << 8);
 	uint16_t quantity = mb_req_buf[MB_PDU_R_QUANTITY_L] + (mb_req_buf[MB_PDU_R_QUANTITY_H] << 8);
@@ -62,26 +63,26 @@ static uint16_t mb_process_pdu_read_fn(char *mb_repl_buf, char *mb_req_buf, uint
 		mb_repl_buf[MB_PDU_FN] = fn;
 		mb_repl_buf[MB_PDU_REPL_N] = mb_pdu_calculate_N(fn, quantity);
 
-//		switch (fn) {
-//		case MB_FN_READ_COILS:
-//			read_coils(mb_req_buf, start_address, quantity);
-//			break;
+		switch (fn) {
+		case MB_FN_READ_COILS:
+			read_coils(mb_repl_buf, start_address, quantity);
+			break;
 //		case MB_FN_READ_DISCRETE:
-//			read_discrete(mb_req_buf, start_address, quantity);
+//			read_discrete(mb_repl_buf, start_address, quantity);
 //			break;
 //		case MB_FN_READ_HOLDING:
-//			read_holding(mb_req_buf, start_address, quantity);
+//			read_holding(mb_repl_buf, start_address, quantity);
 //			break;
 //		case MB_FN_READ_INPUT:
-//			read_inputs(mb_req_buf, start_address, quantity);
+//			read_inputs(mb_repl_buf, start_address, quantity);
 //			break;
-//		}
+		}
 
 	}
 	return mb_pdu_calculate_N(fn, quantity) + 2; // returns PDU size where +2 are N and fn
 }
 
-static uint16_t mb_process_pdu_write_single_fn(char *mb_repl_buf, char *mb_req_buf, uint16_t req_buf_len) {
+static uint16_t mb_process_pdu_write_single_fn(uint8_t *mb_repl_buf, uint8_t *mb_req_buf, uint16_t req_buf_len) {
 	uint8_t fn = mb_req_buf[MB_PDU_FN];
 	uint16_t address = mb_req_buf[MB_PDU_W_REG_ADDR_L] + (mb_req_buf[MB_PDU_W_REG_ADDR_H] << 8);
 	uint16_t valToWrite = mb_req_buf[MB_PDU_W_REG_VAL_L] + (mb_req_buf[MB_PDU_W_REG_VAL_H] << 8);
@@ -103,7 +104,7 @@ static uint16_t mb_process_pdu_write_single_fn(char *mb_repl_buf, char *mb_req_b
 	return 5; // PDU size for write single XXX command
 }
 
-static void mb_mbap_copy(char *mb_repl_buf, char *mb_req_buf) {
+static void mb_mbap_copy(uint8_t *mb_repl_buf, uint8_t *mb_req_buf) {
 	mb_repl_buf[MB_MBAP_TRANSACTION_ID_H] = mb_req_buf[MB_MBAP_TRANSACTION_ID_H];
 	mb_repl_buf[MB_MBAP_TRANSACTION_ID_L] = mb_req_buf[MB_MBAP_TRANSACTION_ID_L];
 	mb_repl_buf[MB_MBAP_PROTOCOL_ID_H] = mb_req_buf[MB_MBAP_PROTOCOL_ID_H];
@@ -154,7 +155,7 @@ static uint8_t mb_process_val(uint16_t fn, uint16_t val) {
 	return exception_code;
 }
 
-static uint16_t mb_process_err(char *mb_repl_buf, uint8_t fn, uint16_t exceptionCode) {
+static uint16_t mb_process_err(uint8_t *mb_repl_buf, uint8_t fn, uint16_t exceptionCode) {
 	mb_repl_buf[MB_PDU_FN] = fn | 0x80;
 	mb_repl_buf[MB_PDU_EXCEPTION_CODE] = exceptionCode;
 	return 2;
@@ -176,4 +177,19 @@ static uint16_t mb_pdu_calculate_N(uint16_t fn, uint16_t quantity) {
 	default:
 		return 0;
 	}
+}
+
+void read_coils(uint8_t *repl_buf, uint16_t address, uint16_t quantity){
+    //uint16_t byte_count = (quantity + 7) / 8;  // Cantidad de bytes necesarios
+    //memset(response_buffer, 0, 256);            // Inicializar TODO el buffer de respuesta a 0
+    //memset(response_buffer, 0, byte_count);    // Inicializar el buffer de respuesta a 0
+	SendString("paso por aca");
+    for (uint16_t i = 0; i < quantity; i++) {
+        uint16_t coil_index = address + i;
+        if (coil_status[coil_index]) {
+            repl_buf[(i / 8) +9 ] |= (1 << (i % 8));  // Establecer el bit correspondiente si la coil está ON
+													//y es mas 9 para dar lugar a fn y cantidad de bytes en
+													//[7] y [8]
+        }
+    }
 }

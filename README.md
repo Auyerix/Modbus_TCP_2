@@ -11,6 +11,6 @@ Revisión 1: Conexión solo TCP
 
 Revisión 2: Agregado de Modbus y sin las funciones Modbus habilitadas
 
-Revisión 3: Modbus con las funciones habilitadas migrado de Linux EN REVISION
+Revisión 3: Modbus con las funciones habilitadas migrado de Linux
 
-Revisión 4:
+Revisión 4: Modbus ajustando lwip para reconexión, keep alive y evitar caída de la placa de red

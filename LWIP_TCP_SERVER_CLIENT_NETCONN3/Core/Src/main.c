@@ -25,6 +25,7 @@
 /* USER CODE BEGIN Includes */
 #include "tcpserver.h"
 #include "string.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -54,6 +55,9 @@ const osThreadAttr_t defaultTask_attributes = {
 };
 /* USER CODE BEGIN PV */
 
+// Supongamos que este es el estado de las coils (256 coils, todas inicializadas en OFF).
+uint8_t coil_status[256] = {1};
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -64,8 +68,6 @@ void StartDefaultTask(void *argument);
 
 /* USER CODE BEGIN PFP */
 
-//Prototipo envío de mensajes por terminal serie
-void SendString(const char *str);
 
 /* USER CODE END PFP */
 
@@ -82,6 +84,25 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
+
+	// Configuramos algunos estados de coils para el ejemplo
+    coil_status[0] = 1;
+    coil_status[1] = 0;
+    coil_status[2] = 0;
+    coil_status[3] = 1;
+    coil_status[4] = 0;
+    coil_status[5] = 0;
+    coil_status[6] = 0;
+    coil_status[7] = 1;
+
+    coil_status[8] = 1;
+    coil_status[15] = 1;
+
+    coil_status[16] = 0;
+    coil_status[23] = 1;
+
+    coil_status[24] = 1;
+    coil_status[31] = 1;
 
   /* USER CODE END 1 */
 

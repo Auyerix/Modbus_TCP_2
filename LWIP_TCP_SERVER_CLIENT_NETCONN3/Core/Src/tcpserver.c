@@ -8,10 +8,10 @@
 
 static struct netconn *conn, *newconn;
 static struct netbuf *netbuf;
-char mb_req_buf[MB_ADU_MAXSIZE];
-char mb_repl_buf[MB_ADU_MAXSIZE];
+uint8_t mb_req_buf[MB_ADU_MAXSIZE];
+uint8_t mb_repl_buf[MB_ADU_MAXSIZE];
 
-static void copyString(char* dest, char* src, unsigned num);
+static void copyString(uint8_t* dest, uint8_t* src, unsigned num);
 
 static void tcp_thread(void *arg) {
 	err_t err, accept_err;
@@ -47,7 +47,7 @@ void tcpserver_init(void) {
 			osPriorityNormal);
 }
 
-static void copyString(char* dest, char* src, unsigned num){
+static void copyString(uint8_t* dest, uint8_t* src, unsigned num){
 	for(unsigned i = 0; i != num; ++i){
 		dest[i] = src[i];
 	}

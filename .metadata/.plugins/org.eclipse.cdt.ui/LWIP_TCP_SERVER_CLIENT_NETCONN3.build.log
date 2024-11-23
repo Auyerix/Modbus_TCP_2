@@ -1,16 +1,10 @@
-17:38:20 **** Build of configuration Debug for project LWIP_TCP_SERVER_CLIENT_NETCONN3 ****
+18:46:44 **** Incremental Build of configuration Debug for project LWIP_TCP_SERVER_CLIENT_NETCONN3 ****
 make -j4 all 
-arm-none-eabi-gcc -o "LWIP_TCP_SERVER_CLIENT_NETCONN3.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gusta\STM32CubeIDE\workspace_1.15.1\LWIP_TCP_SERVER_CLIENT_NETCONN3\STM32F429ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="LWIP_TCP_SERVER_CLIENT_NETCONN3.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
-Finished building target: LWIP_TCP_SERVER_CLIENT_NETCONN3.elf
- 
 arm-none-eabi-size  LWIP_TCP_SERVER_CLIENT_NETCONN3.elf 
-arm-none-eabi-objdump -h -S LWIP_TCP_SERVER_CLIENT_NETCONN3.elf  > "LWIP_TCP_SERVER_CLIENT_NETCONN3.list"
    text	   data	    bss	    dec	    hex	filename
- 110620	    140	  64212	 174972	  2ab7c	LWIP_TCP_SERVER_CLIENT_NETCONN3.elf
+ 110876	    396	  64212	 175484	  2ad7c	LWIP_TCP_SERVER_CLIENT_NETCONN3.elf
 Finished building: default.size.stdout
  
-Finished building: LWIP_TCP_SERVER_CLIENT_NETCONN3.list
- 
 
-17:38:25 Build Finished. 0 errors, 0 warnings. (took 4s.826ms)
+18:46:45 Build Finished. 0 errors, 0 warnings. (took 1s.289ms)
 

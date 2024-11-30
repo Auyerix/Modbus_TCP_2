@@ -1,0 +1,12 @@
+Esta versión NETCONN5 tiene las siguientes configuraciones:
+CMSIS_V1 para que funcione TCP/IP y no se cuelgue.. También se hace el server init:
+void tcpserver_init(void) {
+	sys_thread_new("tcp_thread", tcp_thread, NULL, DEFAULT_THREAD_STACKSIZE,
+			osPriorityNormal);
+}
+ se dejó DEFAULT_THREAD_STACKSIZE y no se multiplicó por 8 como estaba en el ejemplo de servidor
+ 
+ Además dejo los valores originales de la configuración lwip:
+ #define MEM_SIZE (20 * 1024) // 20 KB  (tenía 10 * 1024 y lo pasé a 20)
+#define TCP_SND_BUF (4 * TCP_MSS) (tien 1072 bytes(s) lo paso a 2048)
+#define TCP_WND (4 * TCP_MSS) (tiene 2144)

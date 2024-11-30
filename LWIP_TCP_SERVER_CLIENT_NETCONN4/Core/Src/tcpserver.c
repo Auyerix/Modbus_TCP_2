@@ -70,7 +70,7 @@ static void tcp_thread(void *arg) {
 
 
 void tcpserver_init(void) {
-	sys_thread_new("tcp_thread", tcp_thread, NULL, 8*DEFAULT_THREAD_STACKSIZE,
+	sys_thread_new("tcp_thread", tcp_thread, NULL, /*8**/DEFAULT_THREAD_STACKSIZE,
 			osPriorityNormal);
 }
 

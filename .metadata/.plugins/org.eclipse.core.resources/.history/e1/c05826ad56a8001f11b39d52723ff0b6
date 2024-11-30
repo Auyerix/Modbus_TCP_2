@@ -1,9 +1,0 @@
-#ifndef INC_TCPSERVER_H_
-#define INC_TCPSERVER_H_
-
-void tcpserver_init (void);
-
-static void process_client_connection(struct netconn *client_conn);
-static err_t initialize_server();
-
-#endif /* INC_TCPSERVER_H_ */

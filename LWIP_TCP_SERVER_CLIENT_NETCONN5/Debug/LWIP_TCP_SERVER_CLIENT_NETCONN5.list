@@ -41,13 +41,13 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  18 .debug_line   000395dc  00000000  00000000  0008fa9f  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_str    00100d16  00000000  00000000  000c907b  2**0
+ 19 .debug_str    00100d19  00000000  00000000  000c907b  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .comment      00000043  00000000  00000000  001c9d91  2**0
+ 20 .comment      00000043  00000000  00000000  001c9d94  2**0
                   CONTENTS, READONLY
- 21 .debug_frame  00009bf8  00000000  00000000  001c9dd4  2**2
+ 21 .debug_frame  00009bf8  00000000  00000000  001c9dd8  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 22 .debug_line_str 0000007b  00000000  00000000  001d39cc  2**0
+ 22 .debug_line_str 0000007b  00000000  00000000  001d39d0  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -1702,7 +1702,7 @@ static uint8_t mb_process_start_address(uint16_t fn, uint16_t start_address, uin
  8000d3c:	88ba      	ldrh	r2, [r7, #4]
  8000d3e:	887b      	ldrh	r3, [r7, #2]
  8000d40:	4413      	add	r3, r2
- 8000d42:	2b00      	cmp	r3, #0
+ 8000d42:	2bff      	cmp	r3, #255	@ 0xff
  8000d44:	dd24      	ble.n	8000d90 <mb_process_start_address+0xa0>
 			exception_code = 2;
  8000d46:	2302      	movs	r3, #2
@@ -1714,7 +1714,7 @@ static uint8_t mb_process_start_address(uint16_t fn, uint16_t start_address, uin
  8000d4c:	88ba      	ldrh	r2, [r7, #4]
  8000d4e:	887b      	ldrh	r3, [r7, #2]
  8000d50:	4413      	add	r3, r2
- 8000d52:	2b04      	cmp	r3, #4
+ 8000d52:	2b08      	cmp	r3, #8
  8000d54:	dd1e      	ble.n	8000d94 <mb_process_start_address+0xa4>
 			exception_code = 2;
  8000d56:	2302      	movs	r3, #2
@@ -1726,7 +1726,7 @@ static uint8_t mb_process_start_address(uint16_t fn, uint16_t start_address, uin
  8000d5c:	88ba      	ldrh	r2, [r7, #4]
  8000d5e:	887b      	ldrh	r3, [r7, #2]
  8000d60:	4413      	add	r3, r2
- 8000d62:	2b00      	cmp	r3, #0
+ 8000d62:	2b08      	cmp	r3, #8
  8000d64:	dd18      	ble.n	8000d98 <mb_process_start_address+0xa8>
 			exception_code = 2;
  8000d66:	2302      	movs	r3, #2
@@ -1751,7 +1751,7 @@ static uint8_t mb_process_start_address(uint16_t fn, uint16_t start_address, uin
  8000d7c:	88ba      	ldrh	r2, [r7, #4]
  8000d7e:	887b      	ldrh	r3, [r7, #2]
  8000d80:	4413      	add	r3, r2
- 8000d82:	2b04      	cmp	r3, #4
+ 8000d82:	2b08      	cmp	r3, #8
  8000d84:	dd0c      	ble.n	8000da0 <mb_process_start_address+0xb0>
 			exception_code = 2;
  8000d86:	2302      	movs	r3, #2

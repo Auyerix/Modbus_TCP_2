@@ -36,11 +36,11 @@
 #define MB_COILS_ST			(0)
 #define MB_COILS_Q			(0xFF)
 #define MB_DISCRETE_ST	(MB_COILS_ST + MB_COILS_Q)
-#define MB_DISCRETE_Q		(0)
+#define MB_DISCRETE_Q		(0xFF)
 #define MB_HOLDING_ST 	(MB_DISCRETE_ST + MB_DISCRETE_Q)
-#define MB_HOLDING_Q		(4)
+#define MB_HOLDING_Q		(8)
 #define MB_INPUT_ST			(MB_HOLDING_ST + MB_HOLDING_Q)
-#define MB_INPUT_Q			(0)
+#define MB_INPUT_Q			(8)
 #define MB_MEMORY_SIZE	(MB_COILS_Q + MB_DISCRETE_Q + MB_HOLDING_Q + MB_INPUT_Q)
 // -------------------------- CONFIG END-------------------------------//
 

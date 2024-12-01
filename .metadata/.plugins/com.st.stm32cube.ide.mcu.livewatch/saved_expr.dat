@@ -1,3 +1,5 @@
 coil_status[0]
 coil_status
-repl_buf
+holding_registers
+input_status
+discrete_status

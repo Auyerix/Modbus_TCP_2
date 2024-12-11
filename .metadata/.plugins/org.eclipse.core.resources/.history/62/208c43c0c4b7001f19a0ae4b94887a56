@@ -1,0 +1,19 @@
+/*
+ * driverIO.c
+ *
+ *  Created on: Dec 11, 2024
+ *      Author: gusta
+ */
+
+
+void inputOuputControl(void const * argument){
+
+	  for(;;)
+	  {
+		  //SendString(mensaje);
+		  osDelay(500);
+
+		  osDelay(1);
+	  }
+
+}

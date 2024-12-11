@@ -1,0 +1,26 @@
+/*
+ * driverIO.c
+ *
+ *  Created on: Dec 11, 2024
+ *      Author: gusta
+ */
+
+#include "main.h"
+#include "driverIO.h"
+
+
+void inputOutputControl(void){
+
+
+
+}
+
+void TurnOnRedLED(void)
+{
+    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, GPIO_PIN_SET); // Encender el LED rojo
+}
+
+void TurnOffRedLED(void)
+{
+    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, GPIO_PIN_RESET); // apagar el LED rojo
+}

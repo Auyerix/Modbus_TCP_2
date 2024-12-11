@@ -1,10 +1,10 @@
-00:22:48 **** Incremental Build of configuration Debug for project LWIP_TCP_SERVER_CLIENT_NETCONN5 ****
+19:06:20 **** Incremental Build of configuration Debug for project LWIP_TCP_SERVER_CLIENT_NETCONN5 ****
 make -j4 all 
 arm-none-eabi-size  LWIP_TCP_SERVER_CLIENT_NETCONN5.elf 
    text	   data	    bss	    dec	    hex	filename
- 110180	    396	  62044	 172620	  2a24c	LWIP_TCP_SERVER_CLIENT_NETCONN5.elf
+ 110508	    396	  62052	 172956	  2a39c	LWIP_TCP_SERVER_CLIENT_NETCONN5.elf
 Finished building: default.size.stdout
  
 
-00:22:49 Build Finished. 0 errors, 0 warnings. (took 1s.205ms)
+19:06:21 Build Finished. 0 errors, 0 warnings. (took 1s.363ms)
 

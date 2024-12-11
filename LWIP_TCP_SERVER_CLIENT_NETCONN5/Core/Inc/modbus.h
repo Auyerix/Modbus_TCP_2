@@ -2,6 +2,8 @@
 #define INC_MODBUS_H_
 #include "inttypes.h"
 
+extern osMutexId coilMutexHandle;
+
 // ---------COMMANDS------------------------------//
 #define MB_FN_READ_COILS			(0x01)
 #define MB_FN_READ_DISCRETE		(0x02)

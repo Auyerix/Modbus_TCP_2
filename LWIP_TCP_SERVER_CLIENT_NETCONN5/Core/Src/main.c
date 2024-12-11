@@ -25,6 +25,7 @@
 /* USER CODE BEGIN Includes */
 #include "tcpserver.h"
 #include "string.h"
+#include "driverIO.h"
 
 /* USER CODE END Includes */
 
@@ -47,10 +48,12 @@
 UART_HandleTypeDef huart3;
 
 osThreadId defaultTaskHandle;
+osThreadId DriverTaskHandle;
 osMutexId uartMutexHandle;
+osMutexId coilMutexHandle;
 /* USER CODE BEGIN PV */
 
-// Supongamos que este es el estado de las coils (256 coils, todas inicializadas en OFF).
+// Estado de los coils (salidas)
 uint8_t coil_status[256] = {1};
 // Estado de las discretas (entradas)
 uint8_t discrete_status[256] = {0};
@@ -66,6 +69,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART3_UART_Init(void);
 void StartDefaultTask(void const * argument);
+void StartDriverTask(void const * argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -135,6 +139,10 @@ int main(void)
   osMutexDef(uartMutex);
   uartMutexHandle = osMutexCreate(osMutex(uartMutex));
 
+  /* definition and creation of coilMutex */
+  osMutexDef(coilMutex);
+  coilMutexHandle = osMutexCreate(osMutex(coilMutex));
+
   /* USER CODE BEGIN RTOS_MUTEX */
   /* add mutexes, ... */
   /* USER CODE END RTOS_MUTEX */
@@ -155,6 +163,10 @@ int main(void)
   /* definition and creation of defaultTask */
   osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 512);
   defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
+
+  /* definition and creation of DriverTask */
+  osThreadDef(DriverTask, StartDriverTask, osPriorityNormal, 0, 128);
+  DriverTaskHandle = osThreadCreate(osThread(DriverTask), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -377,6 +389,25 @@ void StartDefaultTask(void const * argument)
 	  osDelay(1);
   }
   /* USER CODE END 5 */
+}
+
+/* USER CODE BEGIN Header_StartDriverTask */
+/**
+* @brief Function implementing the DriverTask thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartDriverTask */
+void StartDriverTask(void const * argument)
+{
+  /* USER CODE BEGIN StartDriverTask */
+  /* Infinite loop */
+  for(;;)
+  {
+	  inputOutputControl();
+	  osDelay(1);
+  }
+  /* USER CODE END StartDriverTask */
 }
 
 /**

@@ -1,6 +1,9 @@
-#include "modbus.h"
+
 #include <string.h>
 #include "main.h"
+#include "cmsis_os.h"
+#include "modbus.h"
+
 
 //--------for reading commands-----------------//
 extern void read_coils(uint8_t *repl_buf, uint16_t address, uint16_t quantity);
@@ -186,11 +189,13 @@ void read_coils(uint8_t *repl_buf, uint16_t address, uint16_t quantity){
 	SendString("leo coils coils \r");
     for (uint16_t i = 0; i < quantity; i++) {
         uint16_t coil_index = address + i;
+        osMutexWait(coilMutexHandle, osWaitForever);
         if (coil_status[coil_index]) {
             repl_buf[(i / 8) +9 ] |= (1 << (i % 8));  // Establecer el bit correspondiente si la coil está ON
 													//y es mas 9 para dar lugar a fn y cantidad de bytes en
 													//[7] y [8]
         }
+        osMutexRelease(coilMutexHandle);
     }
 }
 
@@ -255,10 +260,14 @@ void write_single_coil(uint16_t address, uint16_t val) {
     // Verificar si el valor es válido para una coil (0xFF00 para ON, 0x0000 para OFF)
     if (val == 0xFF00) {
         // Establecer la coil en ON (1)
+    	osMutexWait(coilMutexHandle, osWaitForever);
         coil_status[address] = 1;
+        osMutexRelease(coilMutexHandle);
     } else if (val == 0x0000) {
         // Establecer la coil en OFF (0)
+    	osMutexWait(coilMutexHandle, osWaitForever);
         coil_status[address] = 0;
+        osMutexRelease(coilMutexHandle);
     } else {
         // Valor inválido, manejar error según el protocolo Modbus
         return;

@@ -25,6 +25,7 @@
 /* USER CODE BEGIN Includes */
 #include "tcpserver.h"
 #include "string.h"
+#include "modbus.h"
 #include "driverIO.h"
 
 /* USER CODE END Includes */
@@ -51,16 +52,17 @@ osThreadId defaultTaskHandle;
 osThreadId DriverTaskHandle;
 osMutexId uartMutexHandle;
 osMutexId coilMutexHandle;
+osMutexId discreteMutexHandle;
 /* USER CODE BEGIN PV */
 
 // Estado de los coils (salidas)
-uint8_t coil_status[256] = {1};
+uint8_t coil_status[MB_COILS_Q];
 // Estado de las discretas (entradas)
-uint8_t discrete_status[256] = {0};
+uint8_t discrete_status[MB_DISCRETE_Q];
 // Estado de inputs analógicas
-uint16_t input_status[10] = {0};
+uint16_t input_status[MB_INPUT_Q];
 // holdings registers de 16 bits
-uint16_t holding_registers[10];
+uint16_t holding_registers[MB_HOLDING_Q];
 
 /* USER CODE END PV */
 
@@ -91,23 +93,23 @@ int main(void)
   /* USER CODE BEGIN 1 */
 
 	// Configuramos algunos estados de coils para el ejemplo
-    coil_status[0] = 1;
-    coil_status[1] = 0;
-    coil_status[2] = 0;
-    coil_status[3] = 1;
-    coil_status[4] = 0;
-    coil_status[5] = 0;
-    coil_status[6] = 0;
-    coil_status[7] = 1;
-
-    coil_status[8] = 1;
-    coil_status[15] = 1;
-
-    coil_status[16] = 0;
-    coil_status[23] = 1;
-
-    coil_status[24] = 1;
-    coil_status[31] = 1;
+//    coil_status[0] = 1;
+//    coil_status[1] = 0;
+//    coil_status[2] = 0;
+//    coil_status[3] = 1;
+//    coil_status[4] = 0;
+//    coil_status[5] = 0;
+//    coil_status[6] = 0;
+//    coil_status[7] = 1;
+//
+//    coil_status[8] = 1;
+//    coil_status[15] = 1;
+//
+//    coil_status[16] = 0;
+//    coil_status[23] = 1;
+//
+//    coil_status[24] = 1;
+//    coil_status[31] = 1;
 
   /* USER CODE END 1 */
 
@@ -142,6 +144,10 @@ int main(void)
   /* definition and creation of coilMutex */
   osMutexDef(coilMutex);
   coilMutexHandle = osMutexCreate(osMutex(coilMutex));
+
+  /* definition and creation of discreteMutex */
+  osMutexDef(discreteMutex);
+  discreteMutexHandle = osMutexCreate(osMutex(discreteMutex));
 
   /* USER CODE BEGIN RTOS_MUTEX */
   /* add mutexes, ... */
@@ -281,12 +287,20 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOF_CLK_ENABLE();
+  __HAL_RCC_GPIOE_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
   __HAL_RCC_GPIOG_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOF, output_01_Pin|output_02_Pin|output_03_Pin|output_04_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, LD3_Pin|LD2_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(output_status_GPIO_Port, output_status_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(USB_PowerSwitchOn_GPIO_Port, USB_PowerSwitchOn_Pin, GPIO_PIN_RESET);
@@ -297,12 +311,38 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(USER_Btn_GPIO_Port, &GPIO_InitStruct);
 
+  /*Configure GPIO pins : output_01_Pin output_02_Pin output_03_Pin output_04_Pin */
+  GPIO_InitStruct.Pin = output_01_Pin|output_02_Pin|output_03_Pin|output_04_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : input_02_Pin input_03_Pin input_04_Pin */
+  GPIO_InitStruct.Pin = input_02_Pin|input_03_Pin|input_04_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+
   /*Configure GPIO pins : LD3_Pin LD2_Pin */
   GPIO_InitStruct.Pin = LD3_Pin|LD2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : output_status_Pin */
+  GPIO_InitStruct.Pin = output_status_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(output_status_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : input_01_Pin */
+  GPIO_InitStruct.Pin = input_01_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(input_01_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : USB_PowerSwitchOn_Pin */
   GPIO_InitStruct.Pin = USB_PowerSwitchOn_Pin;
@@ -405,7 +445,7 @@ void StartDriverTask(void const * argument)
   for(;;)
   {
 	  inputOutputControl();
-	  osDelay(1);
+	  osDelay(20);
   }
   /* USER CODE END StartDriverTask */
 }

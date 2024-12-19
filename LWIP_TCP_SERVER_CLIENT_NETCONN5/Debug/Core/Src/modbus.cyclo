@@ -9,6 +9,6 @@
 ../Core/Src/modbus.c:185:6:read_coils	3
 ../Core/Src/modbus.c:202:6:read_discrete	3
 ../Core/Src/modbus.c:219:6:read_inputs	2
-../Core/Src/modbus.c:239:6:read_holding	2
-../Core/Src/modbus.c:258:6:write_single_coil	3
-../Core/Src/modbus.c:279:6:write_single_holding	1
+../Core/Src/modbus.c:242:6:read_holding	2
+../Core/Src/modbus.c:261:6:write_single_coil	3
+../Core/Src/modbus.c:282:6:write_single_holding	1

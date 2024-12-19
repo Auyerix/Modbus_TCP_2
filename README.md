@@ -14,3 +14,5 @@ Revisión 2: Agregado de Modbus y sin las funciones Modbus habilitadas
 Revisión 3: Modbus con las funciones habilitadas migrado de Linux
 
 Revisión 4: Modbus ajustando lwip para reconexión, keep alive y evitar caída de la placa de red
+
+Revisión 5: Versión de trabajo para GitHub. CMSIS_V1 y Hardware programado

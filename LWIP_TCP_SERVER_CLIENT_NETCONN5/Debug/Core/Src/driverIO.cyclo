@@ -1,3 +1,5 @@
-../Core/Src/driverIO.c:13:6:inputOutputControl	2
-../Core/Src/driverIO.c:24:6:TurnOnRedLED	1
-../Core/Src/driverIO.c:29:6:TurnOffRedLED	1
+../Core/Src/driverIO.c:23:6:inputOutputControl	2
+../Core/Src/driverIO.c:50:6:TurnOnRedLED	1
+../Core/Src/driverIO.c:56:6:TurnOffRedLED	1
+../Core/Src/driverIO.c:62:6:ReadGPIO	5
+../Core/Src/driverIO.c:97:6:WriteGPIO	7

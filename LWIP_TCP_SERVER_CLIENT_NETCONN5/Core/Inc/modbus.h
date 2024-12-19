@@ -3,6 +3,7 @@
 #include "inttypes.h"
 
 extern osMutexId coilMutexHandle;
+extern osMutexId discreteMutexHandle;
 
 // ---------COMMANDS------------------------------//
 #define MB_FN_READ_COILS			(0x01)
@@ -61,15 +62,19 @@ extern osMutexId coilMutexHandle;
 #define MB_PDU_EXCEPTION_CODE			(MB_PDU_START + 1)
 #define MB_PDU_REPL_N							(MB_PDU_START + 1)
 
+// para definir el estado que Modbus le manda a las bobinas
+#define MB_ON							(1)
+#define MB_OFF							(0)
+
 // process request and returns ADU size of reply
 uint16_t mb_process(uint8_t *mb_repl_buf, uint8_t *mb_req_buf, uint16_t req_buf_len);
 
 
 //Variables
-extern uint8_t coil_status[256];
-extern uint8_t discrete_status[256];
-extern uint16_t input_status[10];
-extern uint16_t holding_registers[10];
+extern uint8_t coil_status[MB_COILS_Q];
+extern uint8_t discrete_status[MB_DISCRETE_Q];
+extern uint16_t input_status[MB_INPUT_Q];
+extern uint16_t holding_registers[MB_HOLDING_Q];
 
 
 #endif /* INC_MODBUS_H_ */

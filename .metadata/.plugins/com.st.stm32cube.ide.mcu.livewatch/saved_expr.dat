@@ -3,3 +3,5 @@ coil_status
 holding_registers
 input_status
 discrete_status
+in_discrete_status
+out_coil_status

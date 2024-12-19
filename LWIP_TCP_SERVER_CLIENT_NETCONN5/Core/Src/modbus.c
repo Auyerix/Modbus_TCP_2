@@ -227,7 +227,10 @@ void read_inputs(uint8_t *repl_buf, uint16_t address, uint16_t quantity) {
     // Copiar los valores de los registros holding solicitados
     for (uint16_t i = 0; i < quantity; i++) {
         uint16_t inputs_index = address + i;
+
+        osMutexWait(discreteMutexHandle, osWaitForever);
         uint16_t inputs_value = input_status[inputs_index];  // Valor del registro holding
+        osMutexRelease(discreteMutexHandle);
 
         // Poner los 2 bytes del registro holding en el buffer de respuesta
         repl_buf[9 + (i * 2)]     = (inputs_value >> 8) & 0xFF;  // Byte alto

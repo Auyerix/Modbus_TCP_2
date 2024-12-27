@@ -186,7 +186,7 @@ void read_coils(uint8_t *repl_buf, uint16_t address, uint16_t quantity){
     //uint16_t byte_count = (quantity + 7) / 8;  // Cantidad de bytes necesarios
     //memset(response_buffer, 0, 256);            // Inicializar TODO el buffer de respuesta a 0
     //memset(response_buffer, 0, byte_count);    // Inicializar el buffer de respuesta a 0
-	SendString("leo coils coils \r");
+	SendString("Reading coils coils \r");
     for (uint16_t i = 0; i < quantity; i++) {
         uint16_t coil_index = address + i;
         osMutexWait(coilMutexHandle, osWaitForever);
@@ -203,7 +203,7 @@ void read_discrete(uint8_t *repl_buf, uint16_t address, uint16_t quantity){
     // NO USADO uint16_t byte_count = (quantity + 7) / 8;  // Cantidad de bytes necesarios
     //memset(response_buffer, 0, 256);            // Inicializar TODO el buffer de respuesta a 0
     //memset(response_buffer, 0, byte_count);    // Inicializar el buffer de respuesta a 0
-	SendString("leo discrete \r");
+	SendString("Reading discrete \r");
     for (uint16_t i = 0; i < quantity; i++) {
         uint16_t discrete_index = address + i;
         if (discrete_status[discrete_index]) {
@@ -217,7 +217,7 @@ void read_discrete(uint8_t *repl_buf, uint16_t address, uint16_t quantity){
 
 //Lectura de input
 void read_inputs(uint8_t *repl_buf, uint16_t address, uint16_t quantity) {
-	SendString("leo inputs \r");
+	SendString("Reading inputs \r");
     // Cantidad de bytes necesarios: cada registro holding es de 2 bytes (16 bits)
     uint16_t byte_count = quantity * 2;
 
@@ -240,7 +240,7 @@ void read_inputs(uint8_t *repl_buf, uint16_t address, uint16_t quantity) {
 
 //Lectura de holdings
 void read_holding(uint8_t *repl_buf, uint16_t address, uint16_t quantity) {
-	SendString("leo holding \r");
+	SendString("Reading holding \r");
     // Cantidad de bytes necesarios: cada registro holding es de 2 bytes (16 bits)
     uint16_t byte_count = quantity * 2;
 
@@ -259,7 +259,7 @@ void read_holding(uint8_t *repl_buf, uint16_t address, uint16_t quantity) {
 }
 
 void write_single_coil(uint16_t address, uint16_t val) {
-	SendString("escribo coils \r");
+	SendString("Writing coils \r");
     // Verificar si el valor es válido para una coil (0xFF00 para ON, 0x0000 para OFF)
     if (val == 0xFF00) {
         // Establecer la coil en ON (1)
@@ -280,7 +280,7 @@ void write_single_coil(uint16_t address, uint16_t val) {
 }
 
 void write_single_holding(uint16_t address, uint16_t val) {
-	SendString("escribo holding \r");
+	SendString("Writing holding \r");
     // Escribir el valor directamente en el holding register correspondiente
     holding_registers[address] = val;
 }

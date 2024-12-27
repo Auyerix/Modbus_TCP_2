@@ -41,7 +41,7 @@ extern osMutexId discreteMutexHandle;
 #define MB_DISCRETE_ST	(MB_COILS_ST + MB_COILS_Q)
 #define MB_DISCRETE_Q		(0xFF)
 #define MB_HOLDING_ST 	(MB_DISCRETE_ST + MB_DISCRETE_Q)
-#define MB_HOLDING_Q		(8)
+#define MB_HOLDING_Q		(25)
 #define MB_INPUT_ST			(MB_HOLDING_ST + MB_HOLDING_Q)
 #define MB_INPUT_Q			(8)
 #define MB_MEMORY_SIZE	(MB_COILS_Q + MB_DISCRETE_Q + MB_HOLDING_Q + MB_INPUT_Q)
@@ -65,6 +65,31 @@ extern osMutexId discreteMutexHandle;
 // para definir el estado que Modbus le manda a las bobinas
 #define MB_ON							(1)
 #define MB_OFF							(0)
+
+// to define which holding register map to the IP configuration
+
+#define MB_IP_ADDRESS_0			(10)
+#define MB_IP_ADDRESS_1 		(11)
+#define MB_IP_ADDRESS_2 		(12)
+#define MB_IP_ADDRESS_3 		(13)
+#define MB_NETMASK_ADDRESS_0	(14)
+#define MB_NETMASK_ADDRESS_1	(15)
+#define MB_NETMASK_ADDRESS_2	(16)
+#define MB_NETMASK_ADDRESS_3	(17)
+#define MB_GATEWAY_ADDRESS_0	(18)
+#define MB_GATEWAY_ADDRESS_1	(19)
+#define MB_GATEWAY_ADDRESS_2	(20)
+#define MB_GATEWAY_ADDRESS_3	(21)
+
+// define Modbus Holding to use as a switch to save and restore from eeprom
+
+#define MB_SWITH				(7)
+
+// Server Status
+
+#define MB_SERVER_STATUS		(24)
+
+
 
 // process request and returns ADU size of reply
 uint16_t mb_process(uint8_t *mb_repl_buf, uint8_t *mb_req_buf, uint16_t req_buf_len);

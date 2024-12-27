@@ -29,6 +29,8 @@
 
 /* USER CODE BEGIN 0 */
 
+#include "EEPROM.h"  // que además trae la HAL
+
 /* USER CODE END 0 */
 /* Private function prototypes -----------------------------------------------*/
 static void ethernet_link_status_updated(struct netif *netif);
@@ -72,6 +74,29 @@ void MX_LWIP_Init(void)
   GATEWAY_ADDRESS[3] = 1;
 
 /* USER CODE BEGIN IP_ADDRESSES */
+
+  if (HAL_GPIO_ReadPin(USER_Btn_GPIO_Port, USER_Btn_Pin) == GPIO_PIN_RESET) {
+      // Botón no presionado
+  	if (EEPROM_Read(1,0,IP_From_Eeprom,12) != HAL_OK){
+  		SendString("Error de lectura EEPROM en inicio \r");
+  	} else {
+  	  IP_ADDRESS[0] = IP_From_Eeprom[0];
+  	  IP_ADDRESS[1] = IP_From_Eeprom[1];
+  	  IP_ADDRESS[2] = IP_From_Eeprom[2];
+  	  IP_ADDRESS[3] = IP_From_Eeprom[3];
+  	  NETMASK_ADDRESS[0] = IP_From_Eeprom[4];
+  	  NETMASK_ADDRESS[1] = IP_From_Eeprom[5];
+  	  NETMASK_ADDRESS[2] = IP_From_Eeprom[6];
+  	  NETMASK_ADDRESS[3] = IP_From_Eeprom[7];
+  	  GATEWAY_ADDRESS[0] = IP_From_Eeprom[8];
+  	  GATEWAY_ADDRESS[1] = IP_From_Eeprom[9];
+  	  GATEWAY_ADDRESS[2] = IP_From_Eeprom[10];
+  	  GATEWAY_ADDRESS[3] = IP_From_Eeprom[11];
+  	SendString("Seteo de parámetros desde la EEPROM \r");
+  	}
+
+  }
+
 /* USER CODE END IP_ADDRESSES */
 
   /* Initialize the LwIP stack with RTOS */

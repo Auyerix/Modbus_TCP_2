@@ -24,7 +24,7 @@
 #define HD_OUTPUT03	out_coil_status[2]
 #define HD_OUTPUT04	out_coil_status[3]
 
-#define HD_OUTPUT_STATUS	out_coil_status[10]
+//#define HD_OUTPUT_STATUS	out_coil_status[10]
 #define HD_OUTPUT_LED_BLUE	out_coil_status[11]
 
 

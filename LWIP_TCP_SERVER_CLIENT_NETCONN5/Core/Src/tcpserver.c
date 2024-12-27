@@ -25,7 +25,7 @@ static err_t initialize_server();
 static void tcp_thread(void *arg) {
     err_t server_err, accept_err;
 
-    SendString("Estoy en thread principal***********************************\r");
+    SendString("*************** Initial thread started and running ******************* \r");
 
     while (1) {
         // Inicializar el servidor
@@ -33,6 +33,7 @@ static void tcp_thread(void *arg) {
         if (server_err != ERR_OK) {
             //printf("Error: Reintentando iniciar el servidor en %d ms...\n", RETRY_DELAY_MS);
         	SendString("Error: Reintentando iniciar el servidor");
+        	TurnOffRedLED();
             sys_msleep(RETRY_DELAY_MS); // Esperar antes de reintentar (un sleep de la propia librería lwip)
             continue;
         }
@@ -43,6 +44,7 @@ static void tcp_thread(void *arg) {
             if (accept_err == ERR_OK) {
                 //printf("Cliente conectado.\n");
             	SendString("Cliente conectado...\r");
+            	holding_registers[MB_SERVER_STATUS] = 1;
                 process_client_connection(newconn); // Procesar conexión del cliente
             } else {
                 //printf("Error al aceptar conexión (Error: %d). Reintentando...\n", accept_err);
@@ -105,6 +107,7 @@ static void process_client_connection(struct netconn *client_conn) {
     netconn_close(client_conn);
     netconn_delete(client_conn);
     SendString("Desconecto...\r");
+    holding_registers[MB_SERVER_STATUS] = 0;
 }
 
 // Función para inicializar la conexión TCP
@@ -113,6 +116,7 @@ static err_t initialize_server() {
     if (conn == NULL) {
         //printf("Error: No se pudo crear la conexión.\n");
     	SendString("Error: No se pudo crear la conexión.\n");
+    	TurnOffRedLED();
         return ERR_MEM;
     }
 
@@ -121,6 +125,7 @@ static err_t initialize_server() {
     if (err != ERR_OK) {
         //printf("Error: No se pudo enlazar al puerto %d (Error: %d).\n", MB_TCP_PORT, err);
     	SendString("Error: No se pudo enlazar al puerto\n");
+    	TurnOffRedLED();
         netconn_delete(conn);
         conn = NULL;
         return err;
@@ -138,6 +143,7 @@ static err_t initialize_server() {
     SendString("Servidor TCP escuchando en el puerto: ");
     SendNumber(MB_TCP_PORT);
     SendString("\r");
+    TurnOnRedLED();
     return ERR_OK;
 }
 

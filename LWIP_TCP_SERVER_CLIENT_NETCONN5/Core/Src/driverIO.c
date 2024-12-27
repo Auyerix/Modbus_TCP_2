@@ -10,6 +10,7 @@
 #include <string.h>  // Para memcpy
 #include "driverIO.h"
 //#include "Modbus.h"  (ya está en driverIO.h)
+#include "EEPROM.h"
 
 
 /*Variables privadas para este driver donde se alojan entradas y salidas físicas*/
@@ -38,15 +39,12 @@ void inputOutputControl(void){
 
 	osMutexRelease(coilMutexHandle);
 
-	if (out_coil_status[0] == 1)
-		TurnOnRedLED();
-	else
-		TurnOffRedLED();
 
 	WriteGPIO();
 
 }
 
+//LED ROJO para ser usado cuando el remoto esté en running
 void TurnOnRedLED(void)
 {
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, GPIO_PIN_SET); // Encender el LED rojo
@@ -122,12 +120,15 @@ void WriteGPIO(void){
 	}
 /*------------------Auxiliar Outputs --------------------------*/
 
-	if (HD_OUTPUT_STATUS == MB_ON){
+	// Client connected
+	if (holding_registers[MB_SERVER_STATUS] == MB_ON){
 		SET_OUTPUT_STATUS(GPIO_PIN_SET);
 	}
 	else{
 		SET_OUTPUT_STATUS(GPIO_PIN_RESET);
 	}
+
+	//Auxiliar LED AZUL
 	if (HD_OUTPUT_LED_BLUE == MB_ON){
 		SET_OUTPUT_LED_BLUE(GPIO_PIN_SET);
 	}

@@ -42,6 +42,10 @@
 
 /* USER CODE BEGIN 0 */
 
+
+ extern uint8_t IP_To_Eeprom[12];
+ extern uint8_t IP_From_Eeprom[12];
+
 /* USER CODE END 0 */
 
 /* Global Variables ----------------------------------------------------------*/

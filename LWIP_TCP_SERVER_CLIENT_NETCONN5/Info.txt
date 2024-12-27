@@ -7,7 +7,7 @@ void tcpserver_init(void) {
  se dejó DEFAULT_THREAD_STACKSIZE y no se multiplicó por 8 como estaba en el ejemplo de servidor
  
  Además dejo los valores originales de la configuración lwip:
- #define MEM_SIZE (20 * 1024) // 20 KB  (tenía 10 * 1024 y lo pasé a 20)
+ #define MEM_SIZE (10 * 1024) // 20 KB  (tenía 10 * 1024. lo pasé a 20 pero no afectó, lo volví a 10)
 #define TCP_SND_BUF 1072 bytes(s)
 #define TCP_WND (4 * TCP_MSS) (tiene 2144)
 
@@ -36,3 +36,9 @@ AA 55 00 00 00 06 2A 01 00 00 00 08
 AA 55 00 00 00 06 2A 01 00 00 00 10
 AA 55 00 00 00 06 2A 01 00 00 00 18
 **************************************************************************************
+
+23/12/24 Ya funcionando al querer agregar una tareas me dejaba ping pero no levantaba el servidor
+Aumenté TOTAL_HEAP_SIZE de 153600 bytes (que me lo trajo por default) a 20000 y funcionó ok
+//LED ROJO Onboard indica Servidor Ok
+//LED ROJO en Bord de InOut indica conexión al cliente
+//LED AZUL asociado a MB Register 12 solo para pruebas

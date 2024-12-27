@@ -27,6 +27,7 @@
 #include "string.h"
 #include "modbus.h"
 #include "driverIO.h"
+#include "EEPROM.h"
 
 /* USER CODE END Includes */
 
@@ -46,10 +47,13 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+I2C_HandleTypeDef hi2c2;
+
 UART_HandleTypeDef huart3;
 
 osThreadId defaultTaskHandle;
 osThreadId DriverTaskHandle;
+osThreadId EepromManagmentHandle;
 osMutexId uartMutexHandle;
 osMutexId coilMutexHandle;
 osMutexId discreteMutexHandle;
@@ -70,8 +74,10 @@ uint16_t holding_registers[MB_HOLDING_Q];
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART3_UART_Init(void);
+static void MX_I2C2_Init(void);
 void StartDefaultTask(void const * argument);
 void StartDriverTask(void const * argument);
+void EepromReadWrite(void const * argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -132,6 +138,7 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART3_UART_Init();
+  MX_I2C2_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -173,6 +180,10 @@ int main(void)
   /* definition and creation of DriverTask */
   osThreadDef(DriverTask, StartDriverTask, osPriorityNormal, 0, 128);
   DriverTaskHandle = osThreadCreate(osThread(DriverTask), NULL);
+
+  /* definition and creation of EepromManagment */
+  osThreadDef(EepromManagment, EepromReadWrite, osPriorityLow, 0, 128);
+  EepromManagmentHandle = osThreadCreate(osThread(EepromManagment), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -237,6 +248,54 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+}
+
+/**
+  * @brief I2C2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_I2C2_Init(void)
+{
+
+  /* USER CODE BEGIN I2C2_Init 0 */
+
+  /* USER CODE END I2C2_Init 0 */
+
+  /* USER CODE BEGIN I2C2_Init 1 */
+
+  /* USER CODE END I2C2_Init 1 */
+  hi2c2.Instance = I2C2;
+  hi2c2.Init.ClockSpeed = 400000;
+  hi2c2.Init.DutyCycle = I2C_DUTYCYCLE_2;
+  hi2c2.Init.OwnAddress1 = 0;
+  hi2c2.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+  hi2c2.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
+  hi2c2.Init.OwnAddress2 = 0;
+  hi2c2.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
+  hi2c2.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
+  if (HAL_I2C_Init(&hi2c2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure Analogue filter
+  */
+  if (HAL_I2CEx_ConfigAnalogFilter(&hi2c2, I2C_ANALOGFILTER_ENABLE) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure Digital filter
+  */
+  if (HAL_I2CEx_ConfigDigitalFilter(&hi2c2, 0) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN I2C2_Init 2 */
+
+  /* USER CODE END I2C2_Init 2 */
+
 }
 
 /**
@@ -448,6 +507,25 @@ void StartDriverTask(void const * argument)
 	  osDelay(20);
   }
   /* USER CODE END StartDriverTask */
+}
+
+/* USER CODE BEGIN Header_EepromReadWrite */
+/**
+* @brief Function implementing the EepromManagment thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_EepromReadWrite */
+void EepromReadWrite(void const * argument)
+{
+  /* USER CODE BEGIN EepromReadWrite */
+  /* Infinite loop */
+  for(;;)
+  {
+	  detectTransitions();
+	  osDelay(500);
+  }
+  /* USER CODE END EepromReadWrite */
 }
 
 /**

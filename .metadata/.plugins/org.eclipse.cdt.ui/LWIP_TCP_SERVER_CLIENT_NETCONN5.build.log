@@ -1,17 +1,10 @@
-13:51:37 **** Incremental Build of configuration Debug for project LWIP_TCP_SERVER_CLIENT_NETCONN5 ****
+22:03:51 **** Build of configuration Debug for project LWIP_TCP_SERVER_CLIENT_NETCONN5 ****
 make -j4 all 
-arm-none-eabi-gcc "../Core/Src/tcpserver.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F429xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -I../LWIP/App -I../LWIP/Target -I../Middlewares/Third_Party/LwIP/src/include -I../Middlewares/Third_Party/LwIP/system -I../Middlewares/Third_Party/FreeRTOS/Source/include -I../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F -I../Drivers/BSP/Components/lan8742 -I../Middlewares/Third_Party/LwIP/src/include/netif/ppp -I../Middlewares/Third_Party/LwIP/src/include/lwip -I../Middlewares/Third_Party/LwIP/src/include/lwip/apps -I../Middlewares/Third_Party/LwIP/src/include/lwip/priv -I../Middlewares/Third_Party/LwIP/src/include/lwip/prot -I../Middlewares/Third_Party/LwIP/src/include/netif -I../Middlewares/Third_Party/LwIP/src/include/compat/posix -I../Middlewares/Third_Party/LwIP/src/include/compat/posix/arpa -I../Middlewares/Third_Party/LwIP/src/include/compat/posix/net -I../Middlewares/Third_Party/LwIP/src/include/compat/posix/sys -I../Middlewares/Third_Party/LwIP/src/include/compat/stdc -I../Middlewares/Third_Party/LwIP/system/arch -I../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/tcpserver.d" -MT"Core/Src/tcpserver.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/tcpserver.o"
-arm-none-eabi-gcc -o "LWIP_TCP_SERVER_CLIENT_NETCONN5.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\gusta\STM32CubeIDE\workspace_1.15.1\LWIP_TCP_SERVER_CLIENT_NETCONN5\STM32F429ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="LWIP_TCP_SERVER_CLIENT_NETCONN5.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
-Finished building target: LWIP_TCP_SERVER_CLIENT_NETCONN5.elf
- 
 arm-none-eabi-size  LWIP_TCP_SERVER_CLIENT_NETCONN5.elf 
-arm-none-eabi-objdump -h -S LWIP_TCP_SERVER_CLIENT_NETCONN5.elf  > "LWIP_TCP_SERVER_CLIENT_NETCONN5.list"
    text	   data	    bss	    dec	    hex	filename
  117228	    140	  67612	 184980	  2d294	LWIP_TCP_SERVER_CLIENT_NETCONN5.elf
 Finished building: default.size.stdout
  
-Finished building: LWIP_TCP_SERVER_CLIENT_NETCONN5.list
- 
 
-13:51:40 Build Finished. 0 errors, 0 warnings. (took 3s.238ms)
+22:03:53 Build Finished. 0 errors, 0 warnings. (took 1s.427ms)
 

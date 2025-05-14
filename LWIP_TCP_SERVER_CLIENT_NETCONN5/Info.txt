@@ -40,5 +40,13 @@ AA 55 00 00 00 06 2A 01 00 00 00 18
 23/12/24 Ya funcionando al querer agregar una tareas me dejaba ping pero no levantaba el servidor
 Aumenté TOTAL_HEAP_SIZE de 153600 bytes (que me lo trajo por default) a 20000 y funcionó ok
 //LED ROJO Onboard indica Servidor Ok
-//LED ROJO en Bord de InOut indica conexión al cliente
+//LED ROJO en Board de InOut indica conexión al cliente (utilizado en tcpserver.c)
 //LED AZUL asociado a MB Register 12 solo para pruebas
+
+17/1/25
+En el registro holding_registers[MB_SWITH] [7] (Holding Register 8 en Modbus) si hago una transición de 0 a 1 grabo en la EEPROM los 
+valores de IP que están alojados en registros 10 a 21 con sus nombres de macro definidos (en EEPROM,c)
+En el registro holding_registers[MB_SWITH] [7] (Holding Register 8 en Modbus) si hago una transición de 0 a 2 leo y cargo en los registros
+10 a 21 lo que tiene la EEPROM cargada.
+Si arranco el programa con el botón azul presionado no lee de la EEPROM y toma los valores que tiene por 
+default hardcodeados 192.168.1.130
